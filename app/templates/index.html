@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Airline Satisfaction Predictor</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 30px; }
+    .row { margin-bottom: 12px; }
+    input, select { padding: 6px; margin: 6px 8px 6px 0; }
+    input[type="number"] { width: 170px; }
+    .small { width: 170px; }
+    .btn { padding: 8px 14px; }
+  </style>
+</head>
+<body>
+
+<h2>Airline Passenger Satisfaction Predictor</h2>
+
+<form action="/predict" method="post">
+
+  <div class="row">
+    <input type="number" name="Age" placeholder="Age" required>
+    <input type="number" name="Flight Distance" placeholder="Flight Distance" required>
+    <input type="number" name="Departure Delay in Minutes" placeholder="Departure Delay (min)" min="0" required>
+    <input type="number" name="Arrival Delay in Minutes" placeholder="Arrival Delay (min)" min="0" required>
+  </div>
+
+  <div class="row">
+    <input class="small" type="number" name="Inflight wifi service" placeholder="Wifi (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Departure/Arrival time convenient" placeholder="Dep/Arr Convenient (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Ease of Online booking" placeholder="Online Booking (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Gate location" placeholder="Gate Location (0-5)" min="0" max="5" required>
+  </div>
+
+  <div class="row">
+    <input class="small" type="number" name="Food and drink" placeholder="Food & Drink (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Online boarding" placeholder="Online Boarding (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Seat comfort" placeholder="Seat Comfort (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Inflight entertainment" placeholder="Entertainment (0-5)" min="0" max="5" required>
+  </div>
+
+  <div class="row">
+    <input class="small" type="number" name="On-board service" placeholder="On-board Service (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Leg room service" placeholder="Leg Room (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Baggage handling" placeholder="Baggage Handling (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Checkin service" placeholder="Check-in (0-5)" min="0" max="5" required>
+  </div>
+
+  <div class="row">
+    <input class="small" type="number" name="Inflight service" placeholder="Inflight Service (0-5)" min="0" max="5" required>
+    <input class="small" type="number" name="Cleanliness" placeholder="Cleanliness (0-5)" min="0" max="5" required>
+  </div>
+
+  <div class="row">
+    <label>Gender:</label>
+    <select name="Gender" required>
+      <option value="Female">Female</option>
+      <option value="Male">Male</option>
+    </select>
+
+    <label>Customer Type:</label>
+    <select name="Customer Type" required>
+      <option value="Loyal Customer">Loyal Customer</option>
+      <option value="disloyal Customer">disloyal Customer</option>
+    </select>
+
+    <label>Type of Travel:</label>
+    <select name="Type of Travel" required>
+      <option value="Business travel">Business travel</option>
+      <option value="Personal Travel">Personal Travel</option>
+    </select>
+
+    <label>Class:</label>
+    <select name="Class" required>
+      <option value="Business">Business</option>
+      <option value="Eco">Eco</option>
+      <option value="Eco Plus">Eco Plus</option>
+    </select>
+  </div>
+
+  <div class="row">
+    <input class="btn" type="submit" value="Predict">
+  </div>
+
+</form>
+
+<h3>{{ prediction_text }}</h3>
+
+</body>
+</html>
