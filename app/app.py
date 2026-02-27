@@ -1,15 +1,44 @@
 from flask import Flask, request, render_template
 import joblib
 import os
-# create app FIRST
+import urllib.request
+
+# -------------------------------------------------
+# CREATE FLASK APP
+# -------------------------------------------------
 app = Flask(__name__)
 
-# load model
+# -------------------------------------------------
+# MODEL PATH SETUP
+# -------------------------------------------------
 BASE_DIR = os.path.dirname(os.path.abspath(__file__))
-MODEL_PATH = os.path.join(BASE_DIR, "..", "model", "model.pkl")
+MODEL_DIR = os.path.join(BASE_DIR, "..", "model")
+MODEL_PATH = os.path.join(MODEL_DIR, "model.pkl")
+
+# 🔴 IMPORTANT:
+# Replace this with your PUBLIC model download link
+MODEL_URL = "PASTE_MODEL_DOWNLOAD_LINK_HERE"
+
+# create model directory if missing
+os.makedirs(MODEL_DIR, exist_ok=True)
+
+# download model if it does not exist
+if not os.path.exists(MODEL_PATH):
+    if MODEL_URL.startswith("http"):
+        print("Downloading model...")
+        urllib.request.urlretrieve(MODEL_URL, MODEL_PATH)
+        print("Model downloaded.")
+    else:
+        raise FileNotFoundError(
+            "Model not found and MODEL_URL is not set."
+        )
+
+# load model
 model = joblib.load(MODEL_PATH)
 
-
+# -------------------------------------------------
+# ROUTES
+# -------------------------------------------------
 @app.route("/")
 def home():
     return render_template("index.html")
@@ -62,13 +91,22 @@ def predict():
 
         prediction = model.predict([features])[0]
 
-        result = "Satisfied Passenger "if prediction == 1 else "Neutral/Dissatisfied Passenger"
+        if isinstance(prediction, (int, float)):
+            result = "Satisfied" if prediction >= 0.5 else "Neutral or Dissatisfied"
+        else:
+            result = str(prediction)
 
-        return render_template("index.html", prediction_text=result)
+        return render_template("index.html",
+                               prediction_text=f"Prediction: {result}")
 
     except Exception as e:
-        return render_template("index.html", prediction_text=str(e))
+        return render_template("index.html",
+                               prediction_text=f"Error: {str(e)}")
 
 
+# -------------------------------------------------
+# LOCAL RUN (Heroku uses gunicorn)
+# -------------------------------------------------
 if __name__ == "__main__":
-    app.run(debug=True)
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port, debug=False)
