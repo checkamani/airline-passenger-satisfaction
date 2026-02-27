@@ -8,3 +8,4 @@ __pycache__/
 
 model/*.pkl
 model/*.joblib
+model/model.pkl
