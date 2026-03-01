@@ -1,13 +1,16 @@
 FROM python:3.10-slim
 
+ENV PYTHONUNBUFFERED=1
+
 WORKDIR /app
 
-# Copy requirements and install
-COPY cicd/requirements.txt /app/requirements.txt
+RUN apt-get update && apt-get install -y gcc
+
+COPY requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app
 COPY app /app/app
 
 EXPOSE 5000
-CMD gunicorn -b 0.0.0.0:$PORT app.app:app
+
+CMD gunicorn app.app:app --bind 0.0.0.0:$PORT
