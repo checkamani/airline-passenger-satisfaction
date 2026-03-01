@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: airline-satisfaction-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: airline-satisfaction
+  template:
+    metadata:
+      labels:
+        app: airline-satisfaction
+    spec:
+      containers:
+        - name: airline-satisfaction
+          image: YOUR_DOCKERHUB_USERNAME/airline-satisfaction:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 5000
+          env:
+            - name: PORT
+              value: "5000"
+          readinessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 10
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 5000
+            initialDelaySeconds: 15
+            periodSeconds: 20

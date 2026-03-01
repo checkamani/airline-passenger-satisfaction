@@ -6,9 +6,8 @@ WORKDIR /app
 COPY cicd/requirements.txt /app/requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy app + model
+# Copy app
 COPY app /app/app
-COPY model /app/model
 
 EXPOSE 5000
 CMD gunicorn -b 0.0.0.0:$PORT app.app:app
