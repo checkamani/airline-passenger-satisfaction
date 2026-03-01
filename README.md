@@ -32,3 +32,20 @@ Run the Flask app:
 
 ```bash
 python app/app.py
+
+### Heroku Container Deployment
+
+Login:
+heroku container:login
+
+Build:
+docker build -f docker/Dockerfile -t registry.heroku.com/airline-passenger-satisfaction/web .
+
+Push:
+docker push registry.heroku.com/airline-passenger-satisfaction/web
+
+Release:
+heroku container:release web -a airline-passenger-satisfaction
+
+Open:
+heroku open -a airline-passenger-satisfaction
